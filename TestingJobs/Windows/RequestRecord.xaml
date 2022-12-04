@@ -1,0 +1,18 @@
+﻿<Window
+    x:Class="TestingJobs.Windows.RequestRecord"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TestingJobs.Windows"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Заявка"
+    Width="500"
+    Height="450"
+    mc:Ignorable="d">
+    <StackPanel>
+        <TextBlock Margin="10,5" Text="Дата создания" />
+        <DatePicker x:Name="DateCreate" Margin="10,5"/>
+        
+        
+    </StackPanel>
+</Window>
