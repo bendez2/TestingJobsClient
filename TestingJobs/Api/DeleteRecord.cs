@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace TestingJobs.Api
@@ -9,7 +10,7 @@ namespace TestingJobs.Api
         private HttpResponseMessage _response;
         private HttpClient _client;
 
-        public async void DeleteAsync(string apiControllerName, int id)
+        public async Task DeleteAsync(string apiControllerName, int? id)
         {
             _client= new HttpClient();
             _response = await _client.DeleteAsync(_urlApi + apiControllerName + "/" + id.ToString());
@@ -20,7 +21,7 @@ namespace TestingJobs.Api
             }
             else
             {
-                MessageBox.Show("Запись не удалена. Запись уже используется в другой таблице");
+                MessageBox.Show("Запись не удалена.");
             }
         }
     }

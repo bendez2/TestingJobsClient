@@ -7,12 +7,110 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Заявка"
     Width="500"
-    Height="450"
+    Height="750"
     mc:Ignorable="d">
     <StackPanel>
         <TextBlock Margin="10,5" Text="Дата создания" />
-        <DatePicker x:Name="DateCreate" Margin="10,5"/>
-        
-        
+        <TextBox
+            x:Name="DateCreate"
+            Margin="10,5"
+            IsReadOnly="True"
+            Text="{Binding Path=DateCreate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Margin="10,5" Text="Тип заявки" />
+        <ComboBox
+            x:Name="Type"
+            Margin="10,5"
+            DisplayMemberPath="Name"
+            SelectedValue="{Binding Path=Type.NameRequest.Id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Id"
+            SelectionChanged="Type_SelectionChanged" />
+
+        <TextBlock Margin="10,5" Text="Текст" />
+        <TextBox
+            x:Name="Text"
+            Margin="10,5"
+            Text="{Binding Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Margin="10,5" Text="Место оказания услуг" />
+        <TextBox
+            x:Name="Location"
+            Margin="10,5"
+            Text="{Binding Path=Location, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Margin="10,5" Text="Приоритет" />
+        <ComboBox
+            x:Name="Priority"
+            Margin="10,5"
+            DisplayMemberPath="Name"
+            SelectedValue="{Binding Path=Type.Priority.Id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Id"
+            SelectionChanged="Priority_SelectionChanged" />
+
+        <TextBlock Margin="10,5" Text="Время выполнения согласно SLA" />
+        <TextBox
+            x:Name="ExucationTime"
+            Margin="10,5"
+            IsReadOnly="True"
+            Text="{Binding Path=ExucationTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Margin="10,5" Text="Статус" />
+        <ComboBox
+            x:Name="Status"
+            Margin="10,5"
+            DisplayMemberPath="Name"
+            SelectedValue="{Binding Path=Status.Id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Id" />
+
+        <TextBlock Margin="10,5" Text="Время изменения" />
+        <TextBox
+            x:Name="ChangeTime"
+            Margin="10,5"
+            IsReadOnly="True"
+            Text="{Binding Path=ChangeTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Margin="10,5" Text="Комментарий исполнителя" />
+        <TextBox
+            x:Name="Comment"
+            Margin="10,5"
+            Text="{Binding Path=Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Margin="10,5" Text="Дата закрытия" />
+        <TextBox
+            x:Name="CloseTime"
+            Margin="10,5"
+            IsReadOnly="True"
+            Text="{Binding Path=CloseTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Margin="10,5" Text="История исполнителей" />
+        <TextBox
+            x:Name="HistoryExecutor"
+            Margin="10,5"
+            Text="{Binding Path=HistoryExecutor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock Margin="10,5" Text="Инициатор" />
+        <ComboBox
+            x:Name="Initiator"
+            Margin="10,5"
+            DisplayMemberPath="Name"
+            SelectedValue="{Binding Path=Initiator.Id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValuePath="Id" />
+
+        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button
+                x:Name="bSave"
+                Margin="15,10"
+                Padding="15,10"
+                Click="SaveRecord_Click"
+                Content="Сохранить"
+                FontSize="18" />
+            <Button
+                Margin="15,10"
+                Padding="15,10"
+                Click="CancelRecord_Click"
+                Content="Отмена"
+                FontSize="18" />
+        </StackPanel>
+
     </StackPanel>
 </Window>

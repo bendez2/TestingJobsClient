@@ -19,6 +19,9 @@
         <Style TargetType="Grid">
             <Setter Property="Background" Value="#323263" />
         </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="IsReadOnly" Value="True" />
+        </Style>
     </Window.Resources>
     <Grid>
         <TabControl>
@@ -37,13 +40,35 @@
                         <Button
                             Width="150"
                             Margin="3,0"
+                            Click="UpdateRecordsButton_Click"
+                            Content="Обновить данные" />
+                        <Button
+                            Width="150"
+                            Margin="3,0"
+                            Click="EditRecordButton_Click"
+                            Content="Редактировать" />
+
+                        <Button
+                            Width="150"
+                            Margin="3,0"
                             Click="AddRecordButton_Click"
                             Content="Добавить запись" />
                         <Button
+                            x:Name="bDelete"
                             Width="70"
                             Margin="3,0"
                             Click="DeleteButton_Click"
                             Content="Удалить" />
+                        <Button
+                            Width="160"
+                            Margin="3,0"
+                            Click="ExportCSVButton_Click"
+                            Content="Выгрузить данные в CSV" />
+                        <Button
+                            Width="160"
+                            Margin="3,0"
+                            Click="ExportJSONButton_Click"
+                            Content="Выгрузить данные в JSON" />
                     </StackPanel>
                     <StackPanel Width="200" DockPanel.Dock="Right">
                         <Button
@@ -55,62 +80,66 @@
                             Click="CancelSearchButton_Click"
                             Content="Очистить поля" />
                     </StackPanel>
-                    <DataGrid
-                        x:Name="requestTable"
-                        Margin="10,0,10,10"
-                        AutoGenerateColumns="False"
-                        CanUserResizeRows="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn
-                                Width="130"
-                                Binding="{Binding Path=DateCreate}"
-                                Header="Время создания заявки" />
-                            <DataGridTextColumn
-                                Width="130"
-                                Binding="{Binding Path=TypeName}"
-                                Header="Тип" />
-                            <DataGridTextColumn
-                                Width="140"
-                                Binding="{Binding Path=Text}"
-                                Header="Текст" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Path=Location}"
-                                Header="Место оказания услуги" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Path=Priority}"
-                                Header="Приоритет" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Path=ExucationTime}"
-                                Header="Время выполенения заявки" />
-                            <DataGridTextColumn
-                                Width="130"
-                                Binding="{Binding Path=StatusName}"
-                                Header="Статус" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Path=ChangeTime}"
-                                Header="Время изменения" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Path=Comment}"
-                                Header="Комментарии" />
-                            <DataGridTextColumn
-                                Width="*"
-                                Binding="{Binding Path=CloseTime}"
-                                Header="Время закрытия" />
-                            <DataGridTextColumn
-                                Width="130"
-                                Binding="{Binding Path=InitiatorName}"
-                                Header="Инициатор" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-
+                    <Grid>
+                        <DataGrid
+                            x:Name="requestTable"
+                            Margin="10,0,10,10"
+                            AutoGenerateColumns="False"
+                            CanUserResizeRows="False"
+                            SelectionMode="Single">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn
+                                    Width="130"
+                                    Binding="{Binding Path=DateCreate}"
+                                    Header="Время создания заявки" />
+                                <DataGridTextColumn
+                                    Width="130"
+                                    Binding="{Binding Path=Type.NameRequest.Name}"
+                                    Header="Тип" />
+                                <DataGridTextColumn
+                                    Width="140"
+                                    Binding="{Binding Path=Text}"
+                                    Header="Текст" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Path=Location}"
+                                    Header="Место оказания услуги" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Path=Type.Priority.Name}"
+                                    Header="Приоритет" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Path=ExucationTime}"
+                                    Header="Время выполенения заявки" />
+                                <DataGridTextColumn
+                                    Width="130"
+                                    Binding="{Binding Path=Status.Name}"
+                                    Header="Статус" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Path=ChangeTime}"
+                                    Header="Время изменения" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Path=Comment}"
+                                    Header="Комментарии" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Path=CloseTime}"
+                                    Header="Время закрытия" />
+                                <DataGridTextColumn
+                                    Width="*"
+                                    Binding="{Binding Path=HistoryExecutor}"
+                                    Header="История исполнителей" />
+                                <DataGridTextColumn
+                                    Width="130"
+                                    Binding="{Binding Path=Initiator.Name}"
+                                    Header="Инициатор" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
                 </DockPanel>
-
-
             </TabItem>
 
             <TabItem
@@ -303,22 +332,122 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn
                                 Width="*"
-                                Binding="{Binding Path=Name}"
+                                Binding="{Binding Path=NameRequest.Name}"
                                 Header="Наименование" />
-                            <DataGridComboBoxColumn
-                                x:Name="plPriorityIdTable"
-                                Width="100"
-                                DisplayMemberPath="Name"
-                                Header="Категория"
-                                SelectedValueBinding="{Binding Path=PriorityId}"
-                                SelectedValuePath="ID" />
                             <DataGridTextColumn
                                 Width="*"
-                                Binding="{Binding Path=SLA}"
-                                Header="SLA" />
+                                Binding="{Binding Path=Priority.Name}"
+                                Header="Приоритет" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Path=SlaDay}"
+                                Header="Количество дней" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Path=SlaHours}"
+                                Header="Количество часов" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>
+            </TabItem>
+            <TabItem
+                Height="22"
+                VerticalAlignment="Bottom"
+                GotFocus="TabItem_GotFocus"
+                Header="Принятие заявок">
+                <DockPanel>
+                    <StackPanel
+                        Height="25"
+                        Margin="10"
+                        HorizontalAlignment="Right"
+                        DockPanel.Dock="Top"
+                        Orientation="Horizontal">
+                        <Button
+                            Width="150"
+                            Margin="3,0"
+                            Click="EditRecordButton_Click"
+                            Content="Редактировать" />
+                        <Button
+                            Width="150"
+                            Margin="3,0"
+                            Click="AddRecordButton_Click"
+                            Content="Добавить запись" />
+                        <Button
+                            Width="70"
+                            Margin="3,0"
+                            Click="DeleteButton_Click"
+                            Content="Удалить" />
+                    </StackPanel>
+                    <StackPanel Width="200" DockPanel.Dock="Right">
+                        <Button
+                            Margin="5"
+                            Click="SearchButton_Click"
+                            Content="Поиск" />
+                        <Button
+                            Margin="5,0,5,0"
+                            Click="CancelSearchButton_Click"
+                            Content="Очистить поля" />
+                    </StackPanel>
+                    <DataGrid
+                        x:Name="requestAcceptanceTable"
+                        Margin="10,0,10,10"
+                        AutoGenerateColumns="False"
+                        CanUserResizeRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="130"
+                                Binding="{Binding Path=DateCreate}"
+                                Header="Время создания заявки" />
+                            <DataGridTextColumn
+                                Width="130"
+                                Binding="{Binding Path=Type.NameRequest.Name}"
+                                Header="Тип" />
+                            <DataGridTextColumn
+                                Width="140"
+                                Binding="{Binding Path=Text}"
+                                Header="Текст" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Path=Location}"
+                                Header="Место оказания услуги" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Path=Type.Priority.Name}"
+                                Header="Приоритет" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Path=ExucationTime}"
+                                Header="Время выполенения заявки" />
+                            <DataGridTextColumn
+                                Width="130"
+                                Binding="{Binding Path=Status.Name}"
+                                Header="Статус" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Path=ChangeTime}"
+                                Header="Время изменения" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Path=Comment}"
+                                Header="Комментарии" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Path=CloseTime}"
+                                Header="Время закрытия" />
+                            <DataGridTextColumn
+                                Width="*"
+                                Binding="{Binding Path=HistoryExecutor}"
+                                Header="История исполнителей" />
+                            <DataGridTextColumn
+                                Width="130"
+                                Binding="{Binding Path=Initiator.Name}"
+                                Header="Инициатор" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </DockPanel>
+
+
             </TabItem>
         </TabControl>
     </Grid>

@@ -1,25 +1,18 @@
 ﻿using Newtonsoft.Json;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using TestingJobs.Api;
 using TestingJobs.Models;
+using TestingJobs.Windows;
 
 namespace TestingJobs
 {
-
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        private string _urlApi = "https://apis.api-mauijobs.site/api/";
+        private GetRecord _getRecord;
         private TableType _currentTableType;
-        private HttpClient _client;
-        private HttpResponseMessage _response;
-
         private enum TableType
         {
             RequestTable, StatusTable, InitiatorTable, PriorityTable, TypeRequestTable
@@ -29,76 +22,63 @@ namespace TestingJobs
 
         public MainWindow()
         {
-            _client = new HttpClient();
+            _getRecord = new GetRecord();
+
+
             _currentTableType = TableType.RequestTable;
 
             InitializeComponent();
-            RefreshTable(_currentTableType);
+            UpdateRecordsButton_Click(null,null);
         }
 
+        public async Task LoadData()
+        {
+            try
+            {
+                string? data = await _getRecord.GetInformationAsync("Statuses");
+                Views.StatusView = JsonConvert.DeserializeObject<ObservableCollection<Status>>(data);
+
+                data = await _getRecord.GetInformationAsync("Priorities");
+                Views.PriorityView = JsonConvert.DeserializeObject<ObservableCollection<Priority>>(data);
+
+                data = await _getRecord.GetInformationAsync("Requests");
+                Views.RequestView = JsonConvert.DeserializeObject<ObservableCollection<Request>>(data);
+
+                data = await _getRecord.GetInformationAsync("Initiators");
+                Views.InitiatorView = JsonConvert.DeserializeObject<ObservableCollection<Initiator>>(data);
+
+                data = await _getRecord.GetInformationAsync("TypeRequestes");
+                Views.TypeRequestView = JsonConvert.DeserializeObject<ObservableCollection<TypeRequest>>(data);
+
+                data = await _getRecord.GetInformationAsync("NameRequest");
+                Views.NameRequestView = JsonConvert.DeserializeObject<ObservableCollection<NameRequest>>(data);
+
+            }
+            catch
+            {
+                LoadData();
+            }
+
+
+        }
         private async void RefreshTable(TableType tableType)
         {
             switch (tableType)
             {
                 case TableType.RequestTable:
-                    _response = await _client.GetAsync(_urlApi + "Requests");
-
-                    if (_response.StatusCode == HttpStatusCode.OK)
-                    {
-                        HttpContent _responseContent = _response.Content;
-                        var a = await _responseContent.ReadAsStringAsync();
-
-                        Request[] requests1 = JsonConvert.DeserializeObject<Request[]>(a);
-                        requestTable.ItemsSource = requests1;
-                    }
+                    requestTable.ItemsSource = Views.RequestView;
                     break;
                 case TableType.StatusTable:
-                    _response = await _client.GetAsync(_urlApi + "Statuses");
-
-                    if (_response.StatusCode == HttpStatusCode.OK)
-                    {
-                        HttpContent _responseContent = _response.Content;
-                        var a = await _responseContent.ReadAsStringAsync();
-
-                        Status[] requests1 = JsonConvert.DeserializeObject<Status[]>(a);
-                        statusTable.ItemsSource = requests1;
-                    }
+                    statusTable.ItemsSource = Views.StatusView;
                     break;
                 case TableType.TypeRequestTable:
-                    _response = await _client.GetAsync(_urlApi + "TypeRequestes");
-
-                    if (_response.StatusCode == HttpStatusCode.OK)
-                    {
-                        HttpContent _responseContent = _response.Content;
-                        var a = await _responseContent.ReadAsStringAsync();
-
-                        TypeRequest[] requests1 = JsonConvert.DeserializeObject<TypeRequest[]>(a);
-                        typeRequestTable.ItemsSource = requests1;
-                    }
+                    typeRequestTable.ItemsSource = Views.TypeRequestView;
                     break;
                 case TableType.PriorityTable:
-                    _response = await _client.GetAsync(_urlApi + "Priorities");
-
-                    if (_response.StatusCode == HttpStatusCode.OK)
-                    {
-                        HttpContent _responseContent = _response.Content;
-                        var a = await _responseContent.ReadAsStringAsync();
-
-                        Priority[] requests1 = JsonConvert.DeserializeObject<Priority[]>(a);
-                        priorityTable.ItemsSource = requests1;
-                    }
+                    priorityTable.ItemsSource = Views.PriorityView;
                     break;
                 case TableType.InitiatorTable:
-                    _response = await _client.GetAsync(_urlApi + "Initiators");
-
-                    if (_response.StatusCode == HttpStatusCode.OK)
-                    {
-                        HttpContent _responseContent = _response.Content;
-                        var a = await _responseContent.ReadAsStringAsync();
-
-                        Initiator[] requests1 = JsonConvert.DeserializeObject<Initiator[]>(a);
-                        initiatorTable.ItemsSource = requests1;
-                    }
+                    initiatorTable.ItemsSource = Views.InitiatorView;
                     break;
             }
         }
@@ -141,12 +121,13 @@ namespace TestingJobs
 
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            DeleteRecordInTable(_currentTableType);
+            bDelete.IsEnabled = false;
+            await DeleteRecordInTable(_currentTableType);
         }
 
-        private void DeleteRecordInTable(TableType table)
+        private async Task DeleteRecordInTable(TableType table)
         {
             DeleteRecord deleteRecord = new DeleteRecord();
 
@@ -155,47 +136,83 @@ namespace TestingJobs
                 case TableType.RequestTable:
                     if (requestTable.SelectedItem is Request request)
                     {
-                        deleteRecord.DeleteAsync("Requests", request.Id);
+                        await deleteRecord.DeleteAsync("Requests", request.Id);
                     }
                     break;
                 case TableType.StatusTable:
                     if (statusTable.SelectedItem is Status status)
                     {
-                        deleteRecord.DeleteAsync("Statuses", status.Id);
+                        await deleteRecord.DeleteAsync("Statuses", status.Id);
                     }
                     break;
                 case TableType.TypeRequestTable:
                     if (typeRequestTable.SelectedItem is TypeRequest typeRequest)
                     {
-                        deleteRecord.DeleteAsync("TypeRequestes", typeRequest.Id);
+                        await deleteRecord.DeleteAsync("TypeRequestes", typeRequest.Id);
                     }
                     break;
                 case TableType.InitiatorTable:
                     if (initiatorTable.SelectedItem is Initiator initiator)
                     {
-                        deleteRecord.DeleteAsync("Initiators", initiator.Id);
+                        await deleteRecord.DeleteAsync("Initiators", initiator.Id);
                     }
                     break;
                 case TableType.PriorityTable:
                     if (priorityTable.SelectedItem is Priority priority)
-                    { 
-                        deleteRecord.DeleteAsync("Priorities", priority.Id);
+                    {
+                        await deleteRecord.DeleteAsync("Priorities", priority.Id);
                     }
                     break;
             }
             //Сон, чтобы завершился поток удаления
-            Thread.Sleep(2000);
-            RefreshTable(table);
+            bDelete.IsEnabled = true;
+            await RefreshData();
         }
 
         private void AddRecordButton_Click(object sender, RoutedEventArgs e)
         {
-
+            RequestRecord requestRecord = new RequestRecord(null);
+            requestRecord.Show();
         }
 
         private void CancelSearchButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void EditRecordButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (_currentTableType)
+            {
+                case TableType.RequestTable:
+                    if (requestTable.SelectedItem is Request request)
+                    {
+                        new RequestRecord(request).Show();
+                    }
+                    break;
+            }
+        }
+
+        private async Task RefreshData()
+        {
+            await LoadData();
+            RefreshTable(_currentTableType);
+        }
+        private async void UpdateRecordsButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.IsEnabled = false;
+            await RefreshData();
+            this.IsEnabled = true;
+        }
+
+        private void ExportCSVButton_Click(object sender, RoutedEventArgs e)
+        {
+            new DateExportWindow("Csv").Show();
+        }
+
+        private void ExportJSONButton_Click(object sender, RoutedEventArgs e)
+        {
+            new DateExportWindow("Json").Show();
         }
     }
 }

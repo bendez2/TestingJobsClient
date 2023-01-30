@@ -1,18 +1,22 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Text.Json.Serialization;
 
 namespace TestingJobs.Models
 {
     public class TypeRequest
     {
-        [Key]
-
         public int Id { get; set; }
 
-        public string Name { get; set; }
-        
-        public int PriorityID { get; set; }
-        //public Priority? Priority { get; set; }
+        public int NameRequestId { get; set; }
 
-        public string SLA { get; set; }
+        public NameRequest NameRequest { get; set; }
+
+        public int PriorityID { get; set; }
+
+        public Priority? Priority { get; set; }
+
+        public int SlaDay { get; set; }
+
+        public int SlaHours { get; set; }
+
     }
 }

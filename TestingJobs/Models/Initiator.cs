@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace TestingJobs.Models
 {
     public class Initiator
     {
-        [Key]
         public int Id { get; set; }
 
         public string Name { get; set; }
-
-        //public List<Request> Requests { get; set; } = new();
+      
     }
 }
