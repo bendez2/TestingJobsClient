@@ -12,7 +12,7 @@ namespace TestingJobs.Models
 
         public int PriorityID { get; set; }
 
-        public Priority? Priority { get; set; }
+        public Priority Priority { get; set; }
 
         public int SlaDay { get; set; }
 

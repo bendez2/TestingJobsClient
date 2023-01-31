@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,7 +31,7 @@ namespace TestingJobs.Windows
             Priority.ItemsSource = Views.PriorityView;
             Initiator.ItemsSource = Views.InitiatorView;
 
-            if(_request == null)
+            if (_request == null)
             {
                 _request = new Request();
                 LoadNewRecord();
@@ -50,16 +49,21 @@ namespace TestingJobs.Windows
             _request.DateCreate = DateTime.Now;
             DateCreate.Text = _request.DateCreate.ToString();
 
-            _request.ChangeTime= DateTime.Now;
+            _request.ChangeTime = DateTime.Now;
 
-            Status.SelectedItem = Views.StatusView.FirstOrDefault(item => (item.Name == "В ожидании обработки"));
+            _request.StatusId = Views.StatusView.FirstOrDefault(item => (item.Name == "В ожидании обработки")).Id;
         }
 
 
         private async void SaveRecord_Click(object sender, RoutedEventArgs e)
         {
+            if (_request.InitiatorId == null || _request.Text == null || _request.TypeId == null)
+            {
+                MessageBox.Show("Заполните поля для сохранения.");
+                return;
+            }
             bSave.IsEnabled = false;
-            
+
             PostRecord postRecord = new PostRecord();
 
             string a = JsonConvert.SerializeObject(_request);
@@ -77,8 +81,6 @@ namespace TestingJobs.Windows
 
         private void CloseThisWindow()
         {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.LoadData();
             Close();
         }
 
@@ -102,6 +104,7 @@ namespace TestingJobs.Windows
             {
                 TypeRequest? t = Views.TypeRequestView.Where(item => (item.PriorityID == (Int32)Priority.SelectedValue && item.NameRequestId == (Int32)Type.SelectedValue)).FirstOrDefault();
                 _request.ExucationTime = _request.DateCreate.Add(new TimeSpan(t.SlaDay, t.SlaHours, 0, 0));
+                _request.TypeId = t.Id;
 
                 _request.StatusId = Views.StatusView.First(i => i.Name == "В обработке").Id;
             }

@@ -59,7 +59,7 @@
             x:Name="Status"
             Margin="10,5"
             DisplayMemberPath="Name"
-            SelectedValue="{Binding Path=Status.Id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValue="{Binding Path=StatusId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedValuePath="Id" />
 
         <TextBlock Margin="10,5" Text="Время изменения" />
@@ -93,7 +93,7 @@
             x:Name="Initiator"
             Margin="10,5"
             DisplayMemberPath="Name"
-            SelectedValue="{Binding Path=Initiator.Id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedValue="{Binding Path=InitiatorId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedValuePath="Id" />
 
         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">

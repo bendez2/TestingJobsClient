@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:TestingJobs.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Width="400"
-    Height="230"
+    Height="250"
     mc:Ignorable="d">
     <StackPanel>
         <TextBlock

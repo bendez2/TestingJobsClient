@@ -37,7 +37,7 @@ namespace TestingJobs.Models
                 OnPropertyChanged("TypeId");
             }
         }
-        public TypeRequest? Type { get; set; }
+        public TypeRequest Type { get; set; }
 
         private string _text { get; set; }
         public string Text
@@ -81,7 +81,7 @@ namespace TestingJobs.Models
                 OnPropertyChanged("StatusId");
             }
         }
-        public Status? Status { get; set; }
+        public Status Status { get; set; }
 
         private DateTime _changeTime { get; set; }
         public DateTime ChangeTime
@@ -126,7 +126,7 @@ namespace TestingJobs.Models
                 OnPropertyChanged("InitiatorId");
             }
         }
-        public Initiator? Initiator { get; set; }
+        public Initiator Initiator { get; set; }
 
         private string _historyExecutor { get; set; }
         public string HistoryExecutor
