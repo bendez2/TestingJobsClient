@@ -69,6 +69,11 @@
                             Margin="3,0"
                             Click="ExportJSONButton_Click"
                             Content="Выгрузить данные в JSON" />
+                        <Button
+                            Width="160"
+                            Margin="3,0"
+                            Click="CreateReportButton_Click"
+                            Content="Сформировать отчет" />
                     </StackPanel>
                     <StackPanel Width="200" DockPanel.Dock="Right">
                         <Button

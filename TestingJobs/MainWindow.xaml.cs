@@ -207,12 +207,17 @@ namespace TestingJobs
 
         private void ExportCSVButton_Click(object sender, RoutedEventArgs e)
         {
-            new DateExportWindow("Csv").Show();
+            new DateWindow("Csv").Show();
         }
 
         private void ExportJSONButton_Click(object sender, RoutedEventArgs e)
         {
-            new DateExportWindow("Json").Show();
+            new DateWindow("Json").Show();
+        }
+
+        private void CreateReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            new DateWindow("Report").Show();
         }
     }
 }
