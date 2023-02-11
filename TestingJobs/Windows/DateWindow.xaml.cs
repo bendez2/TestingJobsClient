@@ -26,8 +26,7 @@ namespace TestingJobs.Windows
             {
                 tbDangerous.Visibility = Visibility.Collapsed;
             }
-
-            _formatExport = format;
+                        _formatExport = format;
         }
 
         private void ExportButton_Click(object sender, RoutedEventArgs e)
