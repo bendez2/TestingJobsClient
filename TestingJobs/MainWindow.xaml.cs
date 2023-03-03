@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using TestingJobs.Api;
 using TestingJobs.Models;
 using TestingJobs.Windows;
@@ -28,7 +30,7 @@ namespace TestingJobs
             _currentTableType = TableType.RequestTable;
 
             InitializeComponent();
-            UpdateRecordsButton_Click(null,null);
+            UpdateRecordsButton_Click(null, null);
         }
 
         public async Task LoadData()
@@ -118,7 +120,47 @@ namespace TestingJobs
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
+            CollectionViewSource collectionViewSource = new CollectionViewSource();
 
+            collectionViewSource.Source = Views.RequestView;
+            
+            requestTable.ItemsSource = collectionViewSource.View;
+
+            collectionViewSource.Filter += (o, ea) =>
+            {
+                if (ea.Item is Request request)
+                {
+                    string id = request.Id.ToString().ToLower();
+                    string DateCreate = request.DateCreate.ToString().ToLower();
+                    string Type = request.Type.NameRequest.Name.ToLower();
+                    string Text = request.Text.ToLower();
+                    string Location = request.Location.ToLower();
+                    string Priotity = request.Type.Priority.Name.ToLower();
+                    string DateComplete = request.ExucationTime.ToString().ToLower();
+                    string Status = request.Status.Name.ToLower();
+                    string DateOfEdit = request.ChangeTime.ToString().ToLower();
+                    string History = request.HistoryExecutor.ToLower();
+                    string Initiator = request.Initiator.Name.ToLower();
+
+                    if (id.Contains(tbId.Text.ToLower()) &&
+                        DateCreate.Contains(tbDateCreate.Text.ToLower()) &&
+                        Type.Contains(tbType.Text.ToLower()) &&
+                        Location.Contains(tbLocation.Text.ToLower())&&
+                        Priotity.Contains(tbPriority.Text.ToLower()) &&
+                        DateComplete.Contains(tbExecuter.Text.ToLower())&&
+                        Status.Contains(tbStatus.Text.ToLower()) &&
+                        DateOfEdit.Contains(tbTimeEdit.Text.ToLower())&& 
+                        History.Contains(tbHistory.Text.ToLower()) &&
+                        Initiator.Contains(tbInitiator.Text.ToLower()))
+                    {
+                        ea.Accepted = true;
+                    }
+                    else
+                    {
+                        ea.Accepted = false;
+                    }
+                }
+            };
         }
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -164,7 +206,6 @@ namespace TestingJobs
                     }
                     break;
             }
-            //Сон, чтобы завершился поток удаления
             bDelete.IsEnabled = true;
             await RefreshData();
         }
@@ -177,7 +218,7 @@ namespace TestingJobs
 
         private void CancelSearchButton_Click(object sender, RoutedEventArgs e)
         {
-
+            RefreshTable(_currentTableType);
         }
 
         private void EditRecordButton_Click(object sender, RoutedEventArgs e)
@@ -219,5 +260,6 @@ namespace TestingJobs
         {
             new DateWindow("Report").Show();
         }
+        
     }
 }
